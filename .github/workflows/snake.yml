@@ -1,0 +1,85 @@
+name: Atualizar cobrinha das contribuições
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * *'
+  push:
+    branches: [main]
+    paths:
+      - README.md
+      - .github/workflows/snake.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: profile-snake
+  cancel-in-progress: true
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Gerar versões clara e escura
+        uses: Platane/snk/svg-only@d8f6715049803e982ee5ff501b6b9b7d5deeb09b
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: |
+            dist/github-snake.svg?color_snake=#8250df
+            dist/github-snake-dark.svg?palette=github-dark&color_snake=#a78bfa
+      - name: Guardar somente as animações
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: contribution-snake
+          path: dist/*.svg
+          if-no-files-found: error
+          retention-days: 1
+
+  publish:
+    needs: generate
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Receber as animações geradas
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: contribution-snake
+          path: dist
+      - name: Publicar as imagens no branch output
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PROFILE_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const base = 'https://api.github.com/repos/' + process.env.PROFILE_REPO;
+          const headers = {Authorization: 'Bearer ' + process.env.GH_TOKEN, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2026-03-10', 'User-Agent': 'profile-snake'};
+          async function api(path, method = 'GET', body, optional = false) {
+            const response = await fetch(base + path, {method, headers: {...headers, ...(body ? {'Content-Type': 'application/json'} : {})}, ...(body ? {body: JSON.stringify(body)} : {})});
+            if (optional && response.status === 404) return null;
+            if (!response.ok) throw new Error('GitHub HTTP ' + response.status);
+            return response.json();
+          }
+          (async () => {
+            const previous = await api('/git/ref/heads/output', 'GET', undefined, true);
+            const tree = [];
+            for (const name of ['github-snake.svg', 'github-snake-dark.svg']) {
+              const bytes = fs.readFileSync('dist/' + name);
+              if (bytes.length > 2000000 || !bytes.toString('utf8').includes('<svg')) throw new Error('Animação inválida');
+              const blob = await api('/git/blobs', 'POST', {content: bytes.toString('base64'), encoding: 'base64'});
+              tree.push({path: name, mode: '100644', type: 'blob', sha: blob.sha});
+            }
+            const created = await api('/git/trees', 'POST', {tree});
+            const commit = await api('/git/commits', 'POST', {message: 'Atualizar animação das contribuições', tree: created.sha, parents: previous ? [previous.object.sha] : []});
+            if (previous) await api('/git/refs/heads/output', 'PATCH', {sha: commit.sha, force: false});
+            else await api('/git/refs', 'POST', {ref: 'refs/heads/output', sha: commit.sha});
+            console.log('Animações publicadas no branch output.');
+          })().catch(error => {console.error(error.message); process.exitCode = 1;});
+          NODE
