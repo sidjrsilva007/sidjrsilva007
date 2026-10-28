@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="260" viewBox="0 0 1200 260" role="img" aria-label="Sidney Junio Silva — Dev Jr">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="260" viewBox="0 0 1200 260" role="img" aria-label="Sidney Junio Silva — Desenvolvedor Jr">
   <rect width="1200" height="260" rx="16" fill="#0d1117"/>
   <rect x="1" y="1" width="1198" height="258" rx="15" fill="none" stroke="#30363d"/>
   <path d="M55 65h45" stroke="#a78bfa" stroke-width="4" stroke-linecap="round"/>
-  <text x="55" y="103" fill="#a78bfa" font-family="Segoe UI,Arial,sans-serif" font-size="16" letter-spacing="4">DEV JR</text>
+  <text x="55" y="103" fill="#a78bfa" font-family="Segoe UI,Arial,sans-serif" font-size="16" letter-spacing="4">DESENVOLVEDOR JR</text>
   <text x="52" y="161" fill="#f0f6fc" font-family="Segoe UI,Arial,sans-serif" font-size="49" font-weight="700" letter-spacing="-1">Sidney Junio Silva</text>
   <text x="55" y="201" fill="#b1bac4" font-family="Segoe UI,Arial,sans-serif" font-size="20">Desenvolvimento, IA e aprendizado na prática.</text>
   <rect x="942" y="65" width="180" height="130" rx="12" fill="#161b22" stroke="#30363d"/>

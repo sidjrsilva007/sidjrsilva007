@@ -1,11 +1,11 @@
-<p align="center"><img src="assets/header.svg" width="100%" alt="Sidney Junio Silva — Dev Jr, IA e aprendizado na prática"></p>
+<p align="center"><img src="assets/header.svg" width="100%" alt="Sidney Junio Silva — Desenvolvedor Jr, IA e aprendizado na prática"></p>
 
 <p align="center"><strong>Desenvolvedor Júnior · IA aplicada ao desenvolvimento · Projetos na prática</strong></p>
 <p align="center"><a href="#sobre-mim">Sobre mim</a> · <a href="#ia-no-meu-dia-a-dia">IA no meu dia a dia</a> · <a href="#o-que-estou-construindo">Projetos</a> · <a href="#minhas-contribuições">Contribuições</a></p>
 
 ## Sobre mim
 
-Olá! Eu sou o **Sidney**, um Dev Jr construindo meu caminho com estudo e projetos práticos.
+Olá! Eu sou o **Sidney**, um Desenvolvedor Jr construindo meu caminho com estudo e projetos práticos.
 
 Gosto de pegar um problema real, montar uma primeira versão e ir melhorando com testes e uso. Tenho interesse em aplicativos desktop, interfaces, automação e ferramentas para comunidades.
 
